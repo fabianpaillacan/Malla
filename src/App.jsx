@@ -132,8 +132,9 @@ export default function GradeTracker() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#F7DCE6]" style={{backgroundColor: '#F7DCE6', minHeight: '100vh'}}>
-      <div className="w-full h-full bg-[#F7DCE6] p-4">
+    <div className="min-h-screen w-full bg-[#6D869E]" style={{backgroundColor: '#6D869E', minHeight: '100vh'}}>
+     <h1 className="text-center text-4xl font-bold text-white italic"> MALLA CURRICULAR DE KATRINITA 🤍 localstorage...</h1> 
+      <div className="w-full h-full bg-[#6D869E] p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full">
           {semestres.map((materias, semestreIndex) => (
             <div key={semestreIndex} className="bg-[#6D9E6D] w-full rounded-3xl overflow-hidden shadow-lg">
@@ -149,7 +150,7 @@ export default function GradeTracker() {
                       <div
                         key={materiaIndex}
                         onClick={() => !isPromedio && toggleTachado(semestreIndex, materiaIndex)}
-                        className="flex items-center justify-between bg-white/30 hover:bg-orange-300 p-3 rounded-lg w-full transform hover:scale-105 transition-all duration-300 cursor-pointer"
+                        className="flex items-center justify-between bg-white/30 hover:bg-orange-300 p-3 rounded-lg  w-full transform hover:scale-105 transition-all duration-300 cursor-pointer"
                       >
                         <span className={`font-bold text-white ${tachadas[key] ? "line-through decoration-black" : ""}`}>
                           {materia}
