@@ -19,7 +19,6 @@ export default function GradeTracker() {
     if (tachadasGuardadas) {
       setTachadas(JSON.parse(tachadasGuardadas));
     }
-  
     // Marcar como cargado para evitar primer render vacío
     setLoaded(true);
   }, []);
@@ -110,7 +109,7 @@ export default function GradeTracker() {
   return (
     <div className="min-h-screen w-full bg-[#6D869E]">
       <h1 className="text-center text-4xl font-bold text-white italic">
-        MALLA CURRICULAR DE KATRINITA 🤍 localstorage
+        MALLA CURRICULAR DE KATRINITA 🤍 
       </h1>
       <div className="w-full h-full bg-[#6D869E] p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full">
