@@ -105,6 +105,8 @@ export default function GradeTracker() {
       ...prev,
       [key]: value
     }));
+      // Si el campo está vacío, permitirlo
+     
   };
 
   const toggleTachado = (semestreIndex, materiaIndex) => {
