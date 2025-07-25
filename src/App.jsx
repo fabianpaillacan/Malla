@@ -1,101 +1,77 @@
 import { useState, useEffect } from "react";
 
 export default function GradeTracker() {
+  const [loaded, setLoaded] = useState(false);
   const [notas, setNotas] = useState({});
   const [tachadas, setTachadas] = useState({});
 
   useEffect(() => {
-    // Set body and html background color to match the app
     document.body.style.backgroundColor = '#F7DCE6';
     document.documentElement.style.backgroundColor = '#F7DCE6';
-    return () => {
-      // Cleanup on unmount
-      document.body.style.backgroundColor = '';
-      document.documentElement.style.backgroundColor = '';
-    };
+  
+    const notasGuardadas = localStorage.getItem("notas");
+    const tachadasGuardadas = localStorage.getItem("tachadas");
+  
+    if (notasGuardadas) {
+      setNotas(JSON.parse(notasGuardadas));
+    }
+  
+    if (tachadasGuardadas) {
+      setTachadas(JSON.parse(tachadasGuardadas));
+    }
+  
+    // Marcar como cargado para evitar primer render vacío
+    setLoaded(true);
   }, []);
+  
+  useEffect(() => {
+    if (loaded) {
+      localStorage.setItem("notas", JSON.stringify(notas));
+      localStorage.setItem("tachadas",JSON.stringify(tachadas))
+    }
+  }, [notas, tachadas, loaded]);
+  // Guardar notas en localStorage cada vez que cambien
 
   const semestres = [
     [
-      "Zoología",
-      "Biología Celular",
-      "Laboratorio Biología Celular",
-      "Química General y Orgánica",
-      "Matemáticas General",
-      "Introducción a la Medicina Veterinaria",
-      "Promedio"
+      "Zoología", "Biología Celular", "Laboratorio Biología Celular",
+      "Química General y Orgánica", "Matemáticas General", "Introducción a la Medicina Veterinaria", "Promedio"
     ],
     [
-      "Bioquímica",
-      "Agresión y Defensa Orgánica I",
-      "Cuerpo Animal I",
-      "Habilidades Comunicativas",
-      "Inglés I",
-      "Promedio"
+      "Bioquímica", "Agresión y Defensa Orgánica I", "Cuerpo Animal I",
+      "Habilidades Comunicativas", "Inglés I", "Promedio"
     ],
     [
-      "Función y Disfunción Orgánica I",
-      "Agresión y Defensa Orgánica II",
-      "Cuerpo Animal II",
-      "Métodos Cuantitativos RRNN",
-      "Inglés II",
-      "Promedio"
+      "Función y Disfunción Orgánica I", "Agresión y Defensa Orgánica II",
+      "Cuerpo Animal II", "Métodos Cuantitativos RRNN", "Inglés II", "Promedio"
     ],
     [
-      "Función y Disfunción Orgánica II",
-      "Genética",
-      "Ecología General",
-      "Anatomía Clínica",
-      "Inglés III",
-      "Promedio"
+      "Función y Disfunción Orgánica II", "Genética", "Ecología General",
+      "Anatomía Clínica", "Inglés III", "Promedio"
     ],
     [
-      "Biología de la Conservación",
-      "Anatomía Patológica",
-      "Enfermedades de Organismos Acuáticos",
-      "Farmacología",
-      "Nutrición y Alimentación Animal",
-      "Inglés IV",
-      "Promedio"
+      "Biología de la Conservación", "Anatomía Patológica", "Enfermedades de Organismos Acuáticos",
+      "Farmacología", "Nutrición y Alimentación Animal", "Inglés IV", "Promedio"
     ],
     [
-      "Epidemiología y Salud Pública",
-      "Imagenología",
-      "Patología Clínica",
-      "Reproducción",
-      "Razonamiento Científico y TICS",
-      "Promedio"
+      "Epidemiología y Salud Pública", "Imagenología", "Patología Clínica",
+      "Reproducción", "Razonamiento Científico y TICS", "Promedio"
     ],
     [
-      "Inocuidad de los Alimentos",
-      "Manejo de Fauna Silvestre",
-      "Legislación y Evaluación de Impacto Ambiental",
-      "Medicina",
-      "Sistema de Producción Animal",
-      "Promedio"
+      "Inocuidad de los Alimentos", "Manejo de Fauna Silvestre", "Legislación y Evaluación de Impacto Ambiental",
+      "Medicina", "Sistema de Producción Animal", "Promedio"
     ],
     [
-      "Zoonosis y Enfermedades Emergentes",
-      "Patología Molecular",
-      "Cirugía",
-      "Formulación y Evaluación de Proyectos de RRNN",
-      "Integrador I: Práctica Profesional",
-      "Promedio"
+      "Zoonosis y Enfermedades Emergentes", "Patología Molecular", "Cirugía",
+      "Formulación y Evaluación de Proyectos de RRNN", "Integrador I: Práctica Profesional", "Promedio"
     ],
     [
-      "Ética y Bienestar Animal",
-      "Innovación y Transferencia Tecnológica",
-      "Clínica",
-      "Pensamiento Crítico",
-      "Proyecto de Título",
-      "Promedio"
+      "Ética y Bienestar Animal", "Innovación y Transferencia Tecnológica",
+      "Clínica", "Pensamiento Crítico", "Proyecto de Título", "Promedio"
     ],
     [
-      "Electivo Profesional I",
-      "Electivo Profesional II",
-      "Responsabilidad Social",
-      "Integrador II: Internado",
-      "Promedio"
+      "Electivo Profesional I", "Electivo Profesional II",
+      "Responsabilidad Social", "Integrador II: Internado", "Promedio"
     ],
   ];
 
@@ -103,10 +79,8 @@ export default function GradeTracker() {
     const key = `${semestreIndex}-${materiaIndex}`;
     setNotas(prev => ({
       ...prev,
-      [key]: value
+      [key]: value === "" ? "0" : value
     }));
-      // Si el campo está vacío, permitirlo
-     
   };
 
   const toggleTachado = (semestreIndex, materiaIndex) => {
@@ -120,7 +94,7 @@ export default function GradeTracker() {
   const calcularPromedio = (semestreIndex, totalMaterias) => {
     let suma = 0;
     let contador = 0;
-    
+
     for (let i = 0; i < totalMaterias; i++) {
       const key = `${semestreIndex}-${i}`;
       const nota = parseFloat(notas[key]);
@@ -129,13 +103,15 @@ export default function GradeTracker() {
         contador++;
       }
     }
-    
+
     return contador > 0 ? (suma / contador).toFixed(1) : "-";
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#6D869E]" style={{backgroundColor: '#6D869E', minHeight: '100vh'}}>
-     <h1 className="text-center text-4xl font-bold text-white italic"> MALLA CURRICULAR DE KATRINITA 🤍 localstorage...</h1> 
+    <div className="min-h-screen w-full bg-[#6D869E]">
+      <h1 className="text-center text-4xl font-bold text-white italic">
+        MALLA CURRICULAR DE KATRINITA 🤍 localstorage
+      </h1>
       <div className="w-full h-full bg-[#6D869E] p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full">
           {semestres.map((materias, semestreIndex) => (
@@ -152,7 +128,7 @@ export default function GradeTracker() {
                       <div
                         key={materiaIndex}
                         onClick={() => !isPromedio && toggleTachado(semestreIndex, materiaIndex)}
-                        className="flex items-center justify-between bg-white/30 hover:bg-orange-300 p-3 rounded-lg  w-full transform hover:scale-105 transition-all duration-300 cursor-pointer"
+                        className="flex items-center justify-between bg-white/30 hover:bg-orange-300 p-3 rounded-lg w-full transform hover:scale-105 transition-all duration-300 cursor-pointer"
                       >
                         <span className={`font-bold text-white ${tachadas[key] ? "line-through decoration-black" : ""}`}>
                           {materia}
@@ -168,7 +144,7 @@ export default function GradeTracker() {
                               min="10"
                               max="70"
                               placeholder="(Σxi)/n"
-                              value={notas[key] || ""}
+                              value={notas[key] ?? ""}
                               onChange={(e) => handleNotaChange(semestreIndex, materiaIndex, e.target.value)}
                               className="w-24 px-2 py-1 rounded bg-white/80 text-black text-center focus:outline-none focus:ring-2 focus:ring-orange-500 font-medium"
                               onClick={(e) => e.stopPropagation()}
